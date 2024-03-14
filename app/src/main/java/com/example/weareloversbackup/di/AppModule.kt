@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weareloversbackup.data.constant.SHARE_PREF_USER_INFO
-import com.example.weareloversbackup.ui.TestObject
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
