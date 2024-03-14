@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -48,5 +50,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation ("com.google.dagger:hilt-android:2.51")
-    annotationProcessor ("com.google.dagger:hilt-compiler:2.51")
+    kapt ("com.google.dagger:hilt-compiler:2.51")
+}
+
+kapt {
+    correctErrorTypes = true
 }
