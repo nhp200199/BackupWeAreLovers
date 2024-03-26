@@ -7,6 +7,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import com.example.weareloversbackup.R
+import com.example.weareloversbackup.coupleInstantiation.ui.IniActivity
 import com.example.weareloversbackup.data.constant.PREF_YOUR_NAME
 import com.example.weareloversbackup.databinding.ActivitySplashBinding
 import com.example.weareloversbackup.ui.base.BaseActivity

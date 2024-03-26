@@ -1,0 +1,43 @@
+<resources>
+
+<!--    STYLES-->
+    <style name="MyButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/btn_round</item>
+        <item name="android:paddingHorizontal">@dimen/button_padding_horizontal</item>
+        <item name="android:paddingVertical">@dimen/button_padding_vertical</item>
+        <item name="android:minWidth">@dimen/button_min_width</item>
+        <item name="android:textColor">@color/color_state_general_btn_txt</item>
+        <item name="android:textAppearance">?attr/textAppearanceButton</item>
+    </style>
+
+    <style name="MyEditText" parent="Widget.AppCompat.EditText">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/edt_round</item>
+    </style>
+
+<!--    Text View-->
+    <style name="SingleLineRoundBackgroundTextView" parent="android:Widget.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="android:padding">@dimen/default_chip_padding</item>
+        <item name="android:background">@drawable/edt_round</item>
+        <item name="android:maxWidth">100dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+<!--    Text View-->
+    
+    <style name="MyHeadline5" parent="TextAppearance.MaterialComponents.Headline5"/>
+    <style name="MyHeadline5.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyHeadline3" parent="TextAppearance.MaterialComponents.Headline3"/>
+    <style name="MyHeadline3.Bold">
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

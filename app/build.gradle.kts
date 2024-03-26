@@ -51,6 +51,10 @@ dependencies {
 
     implementation ("com.google.dagger:hilt-android:2.51")
     kapt ("com.google.dagger:hilt-compiler:2.51")
+
+    implementation ("androidx.fragment:fragment-ktx:1.6.2")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
 }
 
 kapt {

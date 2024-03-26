@@ -1,4 +1,49 @@
 <resources>
-    <string name="app_name">WeAreLoversBackup</string>
+    <string name="app_name">We Are Lovers</string>
     <string name="welcome">We Are Lovers</string>
+    <string name="your_name">Tên (hoặc biệt danh) của bạn</string>
+    <string name="your_friend_name">Tên (hoặc biệt danh) của người ấy</string>
+    <string name="date">Ngày mà hai bạn bắt đầu dính vô nhau</string>
+    <string name="create_diary">Viết nhật kí</string>
+    <string name="days">    DAYS</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="channel_name">thông báo về ngày hẹn hò</string>
+    <string name="channel_description">đây là các thông báo nhắc nhở về thông tin ngày hẹn hò, dùng để bạn không bị bồ giận khi quên ngày quen nhau</string>
+    <string name="search_hint">Tìm kiếm nhật kí</string>
+    <string name="init_screen_date_hint">Nhấn để chọn</string>
+    <string name="init_screen_btn_confirm_txt">Xác nhận</string>
+    <string name="main_frag_main_txt">Mình đã quen nhau được ...</string>
+    <string name="main_frag_days_txt">Days</string>
+    <string name="frag_diary_txt_no_diary">Chưa có nhật kí</string>
+    <string name="txt_no_pictures_added">Thêm hình ảnh đi bạn nhé!!!</string>
+    <string name="hint_edt_couple_date">Nhấn để chọn</string>
+    <string name="txt_btn_confirm_user_info">Xác nhận</string>
+    <string name="toast_msg_update_diary_success">Nhật kí đã được chỉnh sửa</string>
+    <string name="toast_msg_update_diary_failed">Có lỗi trong quá trình chỉnh sửa. Vui lòng thử lại</string>
+    <string name="title_dialog_change_unsave_confirmation">Chưa lưu thay dổi. Bạn có muốn lưu lại không?</string>
+    <string name="txt_dialog_action_positive">Có</string>
+    <string name="txt_dialog_action_negative">Không</string>
+    <string name="msg_toast_diary_content_unchanged">Bạn chưa thay đổi nội dung nhật kí</string>
+    <string name="toast_msg_diary_created">Đã lưu</string>
+    <string name="toast_msg_fail_create_diary">Có lỗi khi tạo nhật kí</string>
+    <string name="txt_btn_create_diary">Lưu</string>
+    <string name="hint_create_diary">Hãy viết điều bạn đang suy nghĩ nhé</string>
+    <string name="toast_msg_deleted_diary">Nhật kí đã được xóa</string>
+    <string name="toast_msg_fail_delete_diary">Có lỗi khi xóa nhật kí</string>
+    <string name="txt_title_theme">Chủ đề</string>
+    <string name="txt_title_background_picture">Ảnh nền</string>
+    <string name="txt_title_your_name">Tên bạn</string>
+    <string name="txt_action_edit_name">Sửa</string>
+    <string name="txt_title_your_friend_name">Tên người ấy</string>
+    <string name="txt_your_friend_avatar_image">Ảnh của người ấy</string>
+    <string name="txt_your_avatar_image">Ảnh của bạn</string>
+    <string name="txt_action_done_edit_name">Xong</string>
+    <string name="txt_couple_start_date_in_setting">Ngày bắt đầu</string>
+
+<!--    Admob-->
+    <string name="admob_app_id">ca-app-pub-1908558152638152~5472997612</string>
+    <string name="banner_ad_unit_id">ca-app-pub-1908558152638152/7144365333</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/3637484725</string>
 </resources>

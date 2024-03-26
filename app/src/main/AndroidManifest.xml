@@ -11,10 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WeAreLoversBackup"
+        android:theme="@style/AppThemeBase"
         tools:targetApi="31">
         <activity
-            android:name=".ui.IniActivity"
+            android:name=".coupleInstantiation.ui.IniActivity"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"
