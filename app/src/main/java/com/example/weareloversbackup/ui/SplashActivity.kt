@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
 import com.example.weareloversbackup.R
 import com.example.weareloversbackup.coupleInstantiation.ui.IniActivity
+import com.example.weareloversbackup.data.constant.PREF_COUPLE_DATE
 import com.example.weareloversbackup.data.constant.PREF_YOUR_NAME
 import com.example.weareloversbackup.databinding.ActivitySplashBinding
 import com.example.weareloversbackup.ui.base.BaseActivity
@@ -48,7 +49,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 //        }
 
         Handler(mainLooper).postDelayed({
-            val intent = if (sharedPreferences.getString(PREF_YOUR_NAME, "")!!.isEmpty()) {
+            val intent = if (sharedPreferences.getString(PREF_COUPLE_DATE, "")!!.isEmpty()) {
                 Intent(applicationContext, IniActivity::class.java)
             } else {
                 Intent(applicationContext, MainActivity::class.java)

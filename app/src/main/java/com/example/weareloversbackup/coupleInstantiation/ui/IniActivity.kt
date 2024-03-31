@@ -17,6 +17,7 @@ import com.example.weareloversbackup.coupleInstantiation.domain.CoupleInstantiat
 import com.example.weareloversbackup.databinding.ActivityIniBinding
 import com.example.weareloversbackup.ui.MainActivity
 import com.example.weareloversbackup.ui.base.BaseActivity
+import com.example.weareloversbackup.utils.parseDateTimestamps
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -58,6 +59,7 @@ class IniActivity @Inject constructor() : BaseActivity<ActivityIniBinding>() {
     override fun setViewListener() {
         binding.btnConfirm.setOnClickListener {
             Log.d(getClassTag(), "on button confirm clicked")
+            saveCoupleData()
             Intent(this, MainActivity::class.java).apply {
                 startActivity(this)
             }
@@ -91,6 +93,12 @@ class IniActivity @Inject constructor() : BaseActivity<ActivityIniBinding>() {
         binding.edtDate.setOnClickListener {
             showDatePicker()
         }
+    }
+
+    private fun saveCoupleData() {
+        viewModel.saveYourName(binding.edtYourName.text.trim().toString())
+        viewModel.saveYourPartnerName(binding.edtYourFrName.text.trim().toString())
+        viewModel.saveCoupleDate(parseDateTimestamps(binding.edtDate.text.toString()))
     }
 
     private fun showDatePicker() {

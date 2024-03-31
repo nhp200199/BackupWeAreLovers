@@ -19,7 +19,7 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
         coupleRepository.getYourPartnerImageFlow(),
         coupleRepository.getCoupleDateFlow()
     ) {
-            yourName, yourFrName, yourImage, yourFrImage, coupleDate ->
+            yourName, yourImage, yourFrName, yourFrImage, coupleDate ->
         val yourImageUri = Uri.parse(yourImage)
         val yourFrImageUri = Uri.parse(yourFrImage)
         val coupleDayCounts = getCoupleDaysCount(coupleDate)

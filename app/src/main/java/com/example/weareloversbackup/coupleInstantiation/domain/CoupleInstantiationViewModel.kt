@@ -1,17 +1,19 @@
 package com.example.weareloversbackup.coupleInstantiation.domain
 
 import androidx.lifecycle.ViewModel
+import com.example.weareloversbackup.coupleInstantiation.data.ICoupleRepository
 import com.example.weareloversbackup.coupleInstantiation.ui.CoupleInstantiationFormUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class CoupleInstantiationViewModel @Inject constructor() : ViewModel() {
+class CoupleInstantiationViewModel @Inject constructor(
+    private val coupleRepository: ICoupleRepository
+) : ViewModel() {
     private val _yourNameInputStateFlow = MutableStateFlow<String?>(null)
     private val _yourPartnerNameInputStateFlow = MutableStateFlow<String?>(null)
     private val _coupleDateStateFlow = MutableStateFlow<String?>(null)
@@ -68,5 +70,17 @@ class CoupleInstantiationViewModel @Inject constructor() : ViewModel() {
 
     fun setYourPartnerNameInput(input: String) {
         _yourPartnerNameInputStateFlow.value = input
+    }
+
+    fun saveYourName(yourName: String) {
+        coupleRepository.setYourName(yourName)
+    }
+
+    fun saveYourPartnerName(yourPartnerName: String) {
+        coupleRepository.setYourPartnerName(yourPartnerName)
+    }
+
+    fun saveCoupleDate(timestamps: Long) {
+        coupleRepository.setCoupleDate(timestamps)
     }
 }

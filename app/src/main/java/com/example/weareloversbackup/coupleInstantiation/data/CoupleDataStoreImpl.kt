@@ -1,6 +1,7 @@
 package com.example.weareloversbackup.coupleInstantiation.data
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.weareloversbackup.data.constant.DEFAULT_IMAGE_PATH
 import com.example.weareloversbackup.data.constant.PREF_COUPLE_DATE
 import com.example.weareloversbackup.data.constant.PREF_COUPLE_IMAGE
@@ -26,9 +27,9 @@ class CoupleDataStoreImpl @Inject constructor(
     private val yourPartnerImageFlow: MutableStateFlow<String>
     init {
         val yourName = sharedPreferences.getString(PREF_YOUR_NAME, "")
-        val yourPartnerName = sharedPreferences.getString(PREF_YOUR_FRIEND_NAME, DEFAULT_IMAGE_PATH)
+        val yourPartnerName = sharedPreferences.getString(PREF_YOUR_FRIEND_NAME, "")
         val coupeDateFlow = sharedPreferences.getLong(PREF_COUPLE_DATE, 0L)
-        val yourImage = sharedPreferences.getString(PREF_YOUR_IMAGE, "")
+        val yourImage = sharedPreferences.getString(PREF_YOUR_IMAGE, DEFAULT_IMAGE_PATH)
         val yourPartnerImage = sharedPreferences.getString(PREF_YOUR_FRIEND_IMAGE, DEFAULT_IMAGE_PATH)
         val coupleImage = sharedPreferences.getString(PREF_COUPLE_IMAGE, DEFAULT_IMAGE_PATH)
 
@@ -65,26 +66,33 @@ class CoupleDataStoreImpl @Inject constructor(
     }
 
     override fun setYourName(name: String) {
+        sharedPreferences.edit().putString(PREF_YOUR_NAME, name).apply()
         yourNameFlow.value = name
     }
 
     override fun setYourPartnerName(name: String) {
+        sharedPreferences.edit().putString(PREF_YOUR_FRIEND_NAME, name).apply()
         yourPartnerNameFlow.value = name
     }
 
     override fun setCoupleDate(date: Long) {
+        Log.d("CoupleDataStore", "saving date = $date")
+        sharedPreferences.edit().putLong(PREF_COUPLE_DATE, date)
         coupleDateFlow.value = date
     }
 
     override fun setCoupleImage(image: String) {
+        sharedPreferences.edit().putString(PREF_COUPLE_IMAGE, image).apply()
         coupleImageFlow.value = image
     }
 
     override fun setYourImage(image: String) {
+        sharedPreferences.edit().putString(PREF_YOUR_IMAGE, image).apply()
         yourImageFlow.value = image
     }
 
     override fun setYourPartnerImage(image: String) {
+        sharedPreferences.edit().putString(PREF_YOUR_FRIEND_IMAGE, image).apply()
         yourPartnerImageFlow.value = image
     }
 }
