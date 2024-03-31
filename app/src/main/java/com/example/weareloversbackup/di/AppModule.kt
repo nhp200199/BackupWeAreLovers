@@ -39,10 +39,6 @@ abstract class AppModule {
     abstract fun appPreferencesRepository(
         appPreferencesRepositoryImpl: AppPreferencesRepositoryImpl): IAppPreferencesRepository
 
-    @Singleton
-    @Binds
-    abstract fun coupleRepository(
-        coupleRepositoryImpl: CoupleRepositoryImpl): ICoupleRepository
     companion object {
         @Singleton
         @Provides

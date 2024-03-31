@@ -30,7 +30,7 @@
     </style>
 
 <!--    Text View-->
-    
+
     <style name="MyHeadline5" parent="TextAppearance.MaterialComponents.Headline5"/>
     <style name="MyHeadline5.Bold">
         <item name="android:textStyle">bold</item>

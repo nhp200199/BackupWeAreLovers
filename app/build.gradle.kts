@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.weareloversbackup"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -55,6 +55,10 @@ dependencies {
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    implementation ("de.hdodenhof:circleimageview:3.0.1")
+
+    implementation ("com.github.bumptech.glide:glide:4.10.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.10.0")
 }
 
 kapt {

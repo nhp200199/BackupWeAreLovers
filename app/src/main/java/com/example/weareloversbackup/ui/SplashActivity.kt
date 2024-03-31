@@ -11,12 +11,14 @@ import com.example.weareloversbackup.coupleInstantiation.ui.IniActivity
 import com.example.weareloversbackup.data.constant.PREF_YOUR_NAME
 import com.example.weareloversbackup.databinding.ActivitySplashBinding
 import com.example.weareloversbackup.ui.base.BaseActivity
+import com.phucnguyen.lovereminder.di.PrefUserInfo
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     @Inject
+    @PrefUserInfo
     lateinit var sharedPreferences: SharedPreferences
 
     override fun getClassTag(): String {

@@ -2,6 +2,7 @@ package com.example.weareloversbackup.coupleInstantiation.ui
 
 import android.R
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.weareloversbackup.coupleInstantiation.domain.CoupleInstantiationViewModel
 import com.example.weareloversbackup.databinding.ActivityIniBinding
+import com.example.weareloversbackup.ui.MainActivity
 import com.example.weareloversbackup.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,9 +23,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class IniActivity : BaseActivity<ActivityIniBinding>() {
+class IniActivity @Inject constructor() : BaseActivity<ActivityIniBinding>() {
     private val viewModel: CoupleInstantiationViewModel by viewModels()
 
     override fun getClassTag(): String {
@@ -55,6 +58,9 @@ class IniActivity : BaseActivity<ActivityIniBinding>() {
     override fun setViewListener() {
         binding.btnConfirm.setOnClickListener {
             Log.d(getClassTag(), "on button confirm clicked")
+            Intent(this, MainActivity::class.java).apply {
+                startActivity(this)
+            }
         }
 
         binding.edtYourName.addTextChangedListener(object : TextWatcher {

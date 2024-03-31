@@ -1,6 +1,7 @@
 package com.example.weareloversbackup.coupleInstantiation.data
 
 import android.content.SharedPreferences
+import com.example.weareloversbackup.data.constant.DEFAULT_IMAGE_PATH
 import com.example.weareloversbackup.data.constant.PREF_COUPLE_DATE
 import com.example.weareloversbackup.data.constant.PREF_COUPLE_IMAGE
 import com.example.weareloversbackup.data.constant.PREF_YOUR_FRIEND_IMAGE
@@ -25,11 +26,11 @@ class CoupleDataStoreImpl @Inject constructor(
     private val yourPartnerImageFlow: MutableStateFlow<String>
     init {
         val yourName = sharedPreferences.getString(PREF_YOUR_NAME, "")
-        val yourPartnerName = sharedPreferences.getString(PREF_YOUR_FRIEND_NAME, "")
+        val yourPartnerName = sharedPreferences.getString(PREF_YOUR_FRIEND_NAME, DEFAULT_IMAGE_PATH)
         val coupeDateFlow = sharedPreferences.getLong(PREF_COUPLE_DATE, 0L)
         val yourImage = sharedPreferences.getString(PREF_YOUR_IMAGE, "")
-        val yourPartnerImage = sharedPreferences.getString(PREF_YOUR_FRIEND_IMAGE, "")
-        val coupleImage = sharedPreferences.getString(PREF_COUPLE_IMAGE, "")
+        val yourPartnerImage = sharedPreferences.getString(PREF_YOUR_FRIEND_IMAGE, DEFAULT_IMAGE_PATH)
+        val coupleImage = sharedPreferences.getString(PREF_COUPLE_IMAGE, DEFAULT_IMAGE_PATH)
 
         yourNameFlow = MutableStateFlow(yourName!!)
         yourPartnerNameFlow = MutableStateFlow(yourPartnerName!!)
