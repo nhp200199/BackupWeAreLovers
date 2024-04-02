@@ -1,6 +1,7 @@
 package com.example.weareloversbackup.main.home.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -8,6 +9,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.app.ActivityCompat.invalidateOptionsMenu
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,9 +22,6 @@ import com.example.weareloversbackup.main.home.domain.MainFragmentViewModel
 import com.example.weareloversbackup.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -33,13 +33,29 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d(getClassTag(), "onOptionsItemSelected: ${item.itemId}")
         return when (item.itemId) {
-            R.id.action_settings -> {
-                navigateSettingScreen()
+            R.id.menu_action_edit_couple_data -> {
+                viewModel.setIsEditingCoupleDate(isVisible)
+                true
+            }
+            R.id.menu_action_edit_background -> {
+                true
+            }
+            R.id.action_save_couple_data -> {
+                viewModel.saveCoupleData()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun enableCoupleDataEditor(visible: Boolean) {
+        binding.ibEditCoupleDate.isVisible = visible
+        binding.ibEditYourName.isVisible = visible
+        binding.ibEditYourImage.isVisible = visible
+        binding.ibEditYourPartnerName.isVisible = visible
+        binding.ibEditYourPartnerImage.isVisible = visible
     }
 
     private fun navigateSettingScreen() {
@@ -51,13 +67,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         binding.tvYourName.text = userInfoState.yourName
         binding.tvYourFrName.text = userInfoState.yourFrName
 
-//        val calendar = Calendar.getInstance()
-//        var dateStartString = userInfoState.coupleDate
-//        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
-//        val dateStart = simpleDateFormat.parse(dateStartString)
-//        val dateEndString = simpleDateFormat.format(calendar.time)
-//        val dateEnd = simpleDateFormat.parse(dateEndString)
-//        val diff = dateEnd.time - dateStart.time
         binding.tvDayCount.text = userInfoState.coupleDate
 
         Glide.with(requireActivity())
@@ -99,5 +108,25 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isEditingCoupleDataFlow.collect {
+                    invalidateOptionsMenu(requireActivity())
+                    enableCoupleDataEditor(it)
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.cancelEditCoupleData()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.action_settings).isVisible = !viewModel.isEditingCoupleData()
+        menu.findItem(R.id.action_save_couple_data).isVisible = viewModel.isEditingCoupleData()
+        super.onPrepareOptionsMenu(menu)
     }
 }

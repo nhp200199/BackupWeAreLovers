@@ -6,7 +6,9 @@ import com.example.weareloversbackup.coupleInstantiation.data.ICoupleRepository
 import com.example.weareloversbackup.main.home.ui.UserInfoUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.drop
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -25,6 +27,9 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
         val coupleDayCounts = getCoupleDaysCount(coupleDate)
         UserInfoUiState(yourName, yourFrName, yourImageUri, yourFrImageUri, coupleDayCounts.toString())
     }
+
+    private val _isEditingCoupleDate = MutableStateFlow<Boolean>(false)
+    val isEditingCoupleDataFlow: Flow<Boolean> = _isEditingCoupleDate.drop(1)
 
     private fun getCoupleDaysCount(coupleDate: Long): Long {
         val current = Calendar.getInstance().timeInMillis
@@ -50,5 +55,21 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
 
     fun setYourPartnerImage(newImage: String) {
         coupleRepository.setYourPartnerImage(newImage)
+    }
+
+    fun cancelEditCoupleData() {
+        setIsEditingCoupleDate(false)
+    }
+
+    fun saveCoupleData() {
+        setIsEditingCoupleDate(false)
+    }
+
+    fun setIsEditingCoupleDate(isEditing: Boolean) {
+        _isEditingCoupleDate.value = isEditing
+    }
+
+    fun isEditingCoupleData(): Boolean {
+        return _isEditingCoupleDate.value
     }
 }
