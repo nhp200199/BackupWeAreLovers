@@ -53,4 +53,12 @@ class CoupleRepositoryImpl @Inject constructor(
     override fun setYourPartnerImage(image: String) {
         return coupleDataStore.setYourPartnerImage(image)
     }
+
+    override fun saveYourName(name: String) {
+        coupleDataStore.saveYourName(name)
+    }
+
+    override fun saveYourPartnerName(name: String) {
+        coupleDataStore.saveYourPartnerName(name)
+    }
 }

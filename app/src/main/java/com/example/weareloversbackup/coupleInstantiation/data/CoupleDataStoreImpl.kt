@@ -66,18 +66,16 @@ class CoupleDataStoreImpl @Inject constructor(
     }
 
     override fun setYourName(name: String) {
-        sharedPreferences.edit().putString(PREF_YOUR_NAME, name).apply()
         yourNameFlow.value = name
     }
 
     override fun setYourPartnerName(name: String) {
-        sharedPreferences.edit().putString(PREF_YOUR_FRIEND_NAME, name).apply()
         yourPartnerNameFlow.value = name
     }
 
     override fun setCoupleDate(date: Long) {
         Log.d("CoupleDataStore", "saving date = $date")
-        sharedPreferences.edit().putLong(PREF_COUPLE_DATE, date)
+        sharedPreferences.edit().putLong(PREF_COUPLE_DATE, date).apply()
         coupleDateFlow.value = date
     }
 
@@ -94,5 +92,15 @@ class CoupleDataStoreImpl @Inject constructor(
     override fun setYourPartnerImage(image: String) {
         sharedPreferences.edit().putString(PREF_YOUR_FRIEND_IMAGE, image).apply()
         yourPartnerImageFlow.value = image
+    }
+
+    override fun saveYourName(name: String) {
+        setYourName(name)
+        sharedPreferences.edit().putString(PREF_YOUR_NAME, name).apply()
+    }
+
+    override fun saveYourPartnerName(name: String) {
+        setYourPartnerName(name)
+        sharedPreferences.edit().putString(PREF_YOUR_FRIEND_NAME, name).apply()
     }
 }

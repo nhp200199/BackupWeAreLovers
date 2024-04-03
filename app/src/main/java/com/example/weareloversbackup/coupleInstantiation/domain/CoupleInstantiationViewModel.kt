@@ -73,11 +73,11 @@ class CoupleInstantiationViewModel @Inject constructor(
     }
 
     fun saveYourName(yourName: String) {
-        coupleRepository.setYourName(yourName)
+        coupleRepository.saveYourName(yourName)
     }
 
     fun saveYourPartnerName(yourPartnerName: String) {
-        coupleRepository.setYourPartnerName(yourPartnerName)
+        coupleRepository.saveYourPartnerName(yourPartnerName)
     }
 
     fun saveCoupleDate(timestamps: Long) {

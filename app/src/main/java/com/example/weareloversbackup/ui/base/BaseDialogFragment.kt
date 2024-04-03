@@ -16,11 +16,13 @@ abstract class BaseDialogFragment<T: ViewBinding> : DialogFragment() {
 
     protected abstract fun getClassTag(): String
 
-    protected abstract fun getViewBindingClass(inflater: LayoutInflater, container: ViewGroup?): T
+    protected abstract fun getViewBindingClass(inflater: LayoutInflater): T
 
     protected abstract fun setupView()
 
     protected abstract fun setViewListener()
+
+    protected abstract fun createDialog(context: Context): Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(getClassTag(), "onCreate()")
@@ -28,21 +30,13 @@ abstract class BaseDialogFragment<T: ViewBinding> : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        Log.i(getClassTag(), "onCreateView()")
-        _binding = getViewBindingClass(inflater, container)
+        val inflater = requireActivity().layoutInflater
+        _binding = getViewBindingClass(inflater)
 
         setupView()
         setViewListener()
 
-        return binding.root
+        return createDialog(requireContext())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

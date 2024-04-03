@@ -9,3 +9,11 @@ data class UserInfoUiState(
     val yourFrImage: Uri,
     val coupleDate: String
 )
+
+val DEFAULT_USER_INFO_UI_STATE = UserInfoUiState(
+    "",
+    "",
+    Uri.EMPTY,
+    Uri.EMPTY,
+    ""
+)

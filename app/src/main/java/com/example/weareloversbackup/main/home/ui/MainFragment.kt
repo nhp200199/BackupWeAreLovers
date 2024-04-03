@@ -17,6 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.example.weareloversbackup.R
+import com.example.weareloversbackup.data.constant.PREF_YOUR_FRIEND_NAME
+import com.example.weareloversbackup.data.constant.PREF_YOUR_NAME
 import com.example.weareloversbackup.databinding.FragmentMainBinding
 import com.example.weareloversbackup.main.home.domain.MainFragmentViewModel
 import com.example.weareloversbackup.ui.base.BaseFragment
@@ -43,6 +45,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 true
             }
             R.id.action_save_couple_data -> {
+                viewModel.setIsEditingCoupleDate(false)
                 viewModel.saveCoupleData()
                 true
             }
@@ -96,7 +99,23 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     override fun setViewListener() {
+        binding.ibEditYourName.setOnClickListener {
+            showDialogChangeName(PREF_YOUR_NAME, binding.tvYourName.text.toString())
+        }
 
+        binding.ibEditYourPartnerName.setOnClickListener {
+            showDialogChangeName(PREF_YOUR_FRIEND_NAME, binding.tvYourFrName.text.toString())
+        }
+    }
+
+    private fun showDialogChangeName(target: String, currentValue: String) {
+        val bundle = Bundle()
+        bundle.putString("target", target)
+        bundle.putString("name", currentValue)
+
+        val dialogFragment = ChangeNameDialogFragment()
+        dialogFragment.arguments = bundle
+        dialogFragment.show(parentFragmentManager, "ChangeNameDialogFragment")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

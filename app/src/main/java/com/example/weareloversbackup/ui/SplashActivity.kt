@@ -49,7 +49,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 //        }
 
         Handler(mainLooper).postDelayed({
-            val intent = if (sharedPreferences.getString(PREF_COUPLE_DATE, "")!!.isEmpty()) {
+            val intent = if (sharedPreferences.getLong(PREF_COUPLE_DATE, 0) == 0L) {
                 Intent(applicationContext, IniActivity::class.java)
             } else {
                 Intent(applicationContext, MainActivity::class.java)

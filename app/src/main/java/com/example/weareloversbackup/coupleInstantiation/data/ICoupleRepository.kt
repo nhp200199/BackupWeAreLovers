@@ -15,4 +15,6 @@ interface ICoupleRepository {
     fun setCoupleImage(image: String)
     fun setYourImage(image: String)
     fun setYourPartnerImage(image: String)
+    fun saveYourName(name: String)
+    fun saveYourPartnerName(name: String)
 }
