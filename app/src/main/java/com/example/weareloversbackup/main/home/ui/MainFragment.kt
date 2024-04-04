@@ -1,5 +1,6 @@
 package com.example.weareloversbackup.main.home.ui
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,8 +23,11 @@ import com.example.weareloversbackup.data.constant.PREF_YOUR_NAME
 import com.example.weareloversbackup.databinding.FragmentMainBinding
 import com.example.weareloversbackup.main.home.domain.MainFragmentViewModel
 import com.example.weareloversbackup.ui.base.BaseFragment
+import com.example.weareloversbackup.utils.parseDateTimestamps
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.Date
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>() {
@@ -106,6 +110,28 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         binding.ibEditYourPartnerName.setOnClickListener {
             showDialogChangeName(PREF_YOUR_FRIEND_NAME, binding.tvYourFrName.text.toString())
         }
+
+        binding.ibEditCoupleDate.setOnClickListener {
+            showDatePicker()
+        }
+    }
+
+    private fun showDatePicker() {
+        val cal = Calendar.getInstance()
+        val year = cal[Calendar.YEAR]
+        val month = cal[Calendar.MONTH]
+        val day = cal[Calendar.DAY_OF_MONTH]
+        val datePickerDialog = DatePickerDialog(requireContext(),
+            android.R.style.ThemeOverlay_DeviceDefault_Accent_DayNight,
+            { view, year, month, dayOfMonth -> //because the month is counted from 0
+                var month = month
+                month = month + 1
+                val date = "$dayOfMonth/$month/$year"
+                viewModel.setCoupleDate(parseDateTimestamps(date))
+            }, year, month, day
+        )
+        datePickerDialog.datePicker.maxDate = Date().time
+        datePickerDialog.show()
     }
 
     private fun showDialogChangeName(target: String, currentValue: String) {

@@ -66,6 +66,7 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
     fun saveCoupleData() {
         coupleRepository.saveYourName(_userInfoUiStateFlow.value.yourName)
         coupleRepository.saveYourPartnerName(_userInfoUiStateFlow.value.yourFrName)
+        coupleRepository.saveCoupleDate()
     }
 
     fun setIsEditingCoupleDate(isEditing: Boolean) {

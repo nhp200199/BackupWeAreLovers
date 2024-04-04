@@ -17,4 +17,5 @@ interface ICoupleRepository {
     fun setYourPartnerImage(image: String)
     fun saveYourName(name: String)
     fun saveYourPartnerName(name: String)
+    fun saveCoupleDate()
 }
