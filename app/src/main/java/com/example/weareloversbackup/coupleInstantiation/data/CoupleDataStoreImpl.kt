@@ -17,33 +17,33 @@ import javax.inject.Inject
 class CoupleDataStoreImpl @Inject constructor(
     @PrefUserInfo private val sharedPreferences: SharedPreferences
 ) : ICoupleDataStore {
-    private val _yourNameFlow: MutableStateFlow<String>
-    private val _yourPartnerNameFlow: MutableStateFlow<String>
+    private val _yourNameFlow: MutableStateFlow<String?>
+    private val _yourPartnerNameFlow: MutableStateFlow<String?>
     private val _coupleDateFlow: MutableStateFlow<Long>
-    private val _coupleImageFlow: MutableStateFlow<String>
-    private val _yourImageFlow: MutableStateFlow<String>
-    private val _yourPartnerImageFlow: MutableStateFlow<String>
+    private val _coupleImageFlow: MutableStateFlow<String?>
+    private val _yourImageFlow: MutableStateFlow<String?>
+    private val _yourPartnerImageFlow: MutableStateFlow<String?>
     init {
-        val yourName = sharedPreferences.getString(PREF_YOUR_NAME, "")
-        val yourPartnerName = sharedPreferences.getString(PREF_YOUR_FRIEND_NAME, "")
+        val yourName = sharedPreferences.getString(PREF_YOUR_NAME, null)
+        val yourPartnerName = sharedPreferences.getString(PREF_YOUR_FRIEND_NAME, null)
         val coupeDateFlow = sharedPreferences.getLong(PREF_COUPLE_DATE, 0L)
-        val yourImage = sharedPreferences.getString(PREF_YOUR_IMAGE, DEFAULT_IMAGE_PATH)
-        val yourPartnerImage = sharedPreferences.getString(PREF_YOUR_FRIEND_IMAGE, DEFAULT_IMAGE_PATH)
-        val coupleImage = sharedPreferences.getString(PREF_COUPLE_IMAGE, DEFAULT_IMAGE_PATH)
+        val yourImage = sharedPreferences.getString(PREF_YOUR_IMAGE, null)
+        val yourPartnerImage = sharedPreferences.getString(PREF_YOUR_FRIEND_IMAGE, null)
+        val coupleImage = sharedPreferences.getString(PREF_COUPLE_IMAGE, null)
 
-        _yourNameFlow = MutableStateFlow(yourName!!)
-        _yourPartnerNameFlow = MutableStateFlow(yourPartnerName!!)
+        _yourNameFlow = MutableStateFlow(yourName)
+        _yourPartnerNameFlow = MutableStateFlow(yourPartnerName)
         _coupleDateFlow = MutableStateFlow(coupeDateFlow)
-        _yourImageFlow = MutableStateFlow(yourImage!!)
-        _yourPartnerImageFlow = MutableStateFlow(yourPartnerImage!!)
-        _coupleImageFlow = MutableStateFlow(coupleImage!!)
+        _yourImageFlow = MutableStateFlow(yourImage)
+        _yourPartnerImageFlow = MutableStateFlow(yourPartnerImage)
+        _coupleImageFlow = MutableStateFlow(coupleImage)
     }
 
-    override fun getYourNameFlow(): Flow<String> {
+    override fun getYourNameFlow(): Flow<String?> {
         return _yourNameFlow.asStateFlow()
     }
 
-    override fun getYourPartnerNameFlow(): Flow<String> {
+    override fun getYourPartnerNameFlow(): Flow<String?> {
         return _yourPartnerNameFlow.asStateFlow()
     }
 
@@ -51,15 +51,15 @@ class CoupleDataStoreImpl @Inject constructor(
         return _coupleDateFlow.asStateFlow()
     }
 
-    override fun getCoupleImageFlow(): Flow<String> {
+    override fun getCoupleImageFlow(): Flow<String?> {
         return _coupleImageFlow.asStateFlow()
     }
 
-    override fun getYourImageFlow(): Flow<String> {
+    override fun getYourImageFlow(): Flow<String?> {
         return _yourImageFlow.asStateFlow()
     }
 
-    override fun getYourPartnerImageFlow(): Flow<String> {
+    override fun getYourPartnerImageFlow(): Flow<String?> {
         return _yourPartnerImageFlow.asStateFlow()
     }
 
@@ -90,14 +90,12 @@ class CoupleDataStoreImpl @Inject constructor(
         _yourPartnerImageFlow.value = image
     }
 
-    override fun saveYourName(name: String) {
-        sharedPreferences.edit().putString(PREF_YOUR_NAME, name).apply()
-        setYourName(name)
+    override fun saveYourName() {
+        sharedPreferences.edit().putString(PREF_YOUR_NAME, _yourNameFlow.value).apply()
     }
 
-    override fun saveYourPartnerName(name: String) {
-        sharedPreferences.edit().putString(PREF_YOUR_FRIEND_NAME, name).apply()
-        setYourPartnerName(name)
+    override fun saveYourPartnerName() {
+        sharedPreferences.edit().putString(PREF_YOUR_FRIEND_NAME, _yourPartnerNameFlow.value).apply()
     }
 
     override fun saveCoupleDate() {

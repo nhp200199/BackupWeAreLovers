@@ -1,16 +1,18 @@
 package com.example.weareloversbackup.coupleInstantiation.data
 
+import com.example.weareloversbackup.data.constant.DEFAULT_IMAGE_PATH
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CoupleRepositoryImpl @Inject constructor(
     private val coupleDataStore: ICoupleDataStore
 ) : ICoupleRepository {
-    override fun getYourNameFlow(): Flow<String> {
+    override fun getYourNameFlow(): Flow<String?> {
         return coupleDataStore.getYourNameFlow()
     }
 
-    override fun getYourPartnerNameFlow(): Flow<String> {
+    override fun getYourPartnerNameFlow(): Flow<String?> {
         return coupleDataStore.getYourPartnerNameFlow()
     }
 
@@ -20,14 +22,17 @@ class CoupleRepositoryImpl @Inject constructor(
 
     override fun getCoupleImageFlow(): Flow<String> {
         return coupleDataStore.getCoupleImageFlow()
+            .map { it ?: DEFAULT_IMAGE_PATH }
     }
 
     override fun getYourImageFlow(): Flow<String> {
         return coupleDataStore.getYourImageFlow()
+            .map { it ?: DEFAULT_IMAGE_PATH }
     }
 
     override fun getYourPartnerImageFlow(): Flow<String> {
         return coupleDataStore.getYourPartnerImageFlow()
+            .map { it ?: DEFAULT_IMAGE_PATH }
     }
 
     override fun setYourName(name: String) {
@@ -54,12 +59,12 @@ class CoupleRepositoryImpl @Inject constructor(
         return coupleDataStore.setYourPartnerImage(image)
     }
 
-    override fun saveYourName(name: String) {
-        coupleDataStore.saveYourName(name)
+    override fun saveYourName() {
+        coupleDataStore.saveYourName()
     }
 
-    override fun saveYourPartnerName(name: String) {
-        coupleDataStore.saveYourPartnerName(name)
+    override fun saveYourPartnerName() {
+        coupleDataStore.saveYourPartnerName()
     }
 
     override fun saveCoupleDate() {

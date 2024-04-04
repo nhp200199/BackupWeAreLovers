@@ -96,9 +96,9 @@ class IniActivity @Inject constructor() : BaseActivity<ActivityIniBinding>() {
     }
 
     private fun saveCoupleData() {
-        viewModel.saveYourName(binding.edtYourName.text.trim().toString())
-        viewModel.saveYourPartnerName(binding.edtYourFrName.text.trim().toString())
-        viewModel.saveCoupleDate(parseDateTimestamps(binding.edtDate.text.toString()))
+        viewModel.saveYourName()
+        viewModel.saveYourPartnerName()
+        viewModel.saveCoupleDate()
     }
 
     private fun showDatePicker() {

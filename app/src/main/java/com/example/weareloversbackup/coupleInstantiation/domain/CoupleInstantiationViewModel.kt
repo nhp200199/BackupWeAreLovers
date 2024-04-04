@@ -3,9 +3,13 @@ package com.example.weareloversbackup.coupleInstantiation.domain
 import androidx.lifecycle.ViewModel
 import com.example.weareloversbackup.coupleInstantiation.data.ICoupleRepository
 import com.example.weareloversbackup.coupleInstantiation.ui.CoupleInstantiationFormUIState
+import com.example.weareloversbackup.utils.formatDate
+import com.example.weareloversbackup.utils.parseDateTimestamps
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -14,11 +18,13 @@ import javax.inject.Inject
 class CoupleInstantiationViewModel @Inject constructor(
     private val coupleRepository: ICoupleRepository
 ) : ViewModel() {
-    private val _yourNameInputStateFlow = MutableStateFlow<String?>(null)
-    private val _yourPartnerNameInputStateFlow = MutableStateFlow<String?>(null)
-    private val _coupleDateStateFlow = MutableStateFlow<String?>(null)
-    val coupleDateStateFlow = _coupleDateStateFlow.filterNotNull()
 
+    private val _yourNameInputStateFlow = coupleRepository.getYourNameFlow()
+
+    private val _yourPartnerNameInputStateFlow = coupleRepository.getYourPartnerNameFlow()
+    private val _coupleDateStateFlow = coupleRepository.getCoupleDateFlow()
+    val coupleDateStateFlow = _coupleDateStateFlow.filter { it != 0L }
+        .map { formatDate(it) }
     private val _yourNameInputErrorStateFlow = _yourNameInputStateFlow.map {
         val errors = mutableListOf<String>()
         if (it == null) {
@@ -44,7 +50,7 @@ class CoupleInstantiationViewModel @Inject constructor(
 
     private val _coupleDateErrorStateFlow = _coupleDateStateFlow.map {
         val errors = mutableListOf<String>()
-        if (it == null) {
+        if (it == 0L) {
             errors.add("Init")
         }
         errors
@@ -61,26 +67,26 @@ class CoupleInstantiationViewModel @Inject constructor(
     }
 
     fun setCoupleDate(date: String) {
-        _coupleDateStateFlow.value = date
+        coupleRepository.setCoupleDate(parseDateTimestamps(date))
     }
 
     fun setYourNameInput(input: String) {
-        _yourNameInputStateFlow.value = input
+        coupleRepository.setYourName(input)
     }
 
     fun setYourPartnerNameInput(input: String) {
-        _yourPartnerNameInputStateFlow.value = input
+        coupleRepository.setYourPartnerName(input)
     }
 
-    fun saveYourName(yourName: String) {
-        coupleRepository.saveYourName(yourName)
+    fun saveYourName() {
+        coupleRepository.saveYourName()
     }
 
-    fun saveYourPartnerName(yourPartnerName: String) {
-        coupleRepository.saveYourPartnerName(yourPartnerName)
+    fun saveYourPartnerName() {
+        coupleRepository.saveYourPartnerName()
     }
 
-    fun saveCoupleDate(timestamps: Long) {
-        coupleRepository.setCoupleDate(timestamps)
+    fun saveCoupleDate() {
+        coupleRepository.saveCoupleDate()
     }
 }

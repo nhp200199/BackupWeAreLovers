@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weareloversbackup.coupleInstantiation.data.ICoupleRepository
+import com.example.weareloversbackup.data.constant.DEFAULT_IMAGE_PATH
 import com.example.weareloversbackup.main.home.ui.DEFAULT_USER_INFO_UI_STATE
 import com.example.weareloversbackup.main.home.ui.UserInfoUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,10 +28,15 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
         coupleRepository.getCoupleDateFlow()
     ) {
             yourName, yourImage, yourFrName, yourFrImage, coupleDate ->
-        val yourImageUri = Uri.parse(yourImage)
-        val yourFrImageUri = Uri.parse(yourFrImage)
+        val yourImageUri = Uri.parse(yourImage ?: DEFAULT_IMAGE_PATH)
+        val yourFrImageUri = Uri.parse(yourFrImage ?: DEFAULT_IMAGE_PATH)
         val coupleDayCounts = getCoupleDaysCount(coupleDate)
-        UserInfoUiState(yourName, yourFrName, yourImageUri, yourFrImageUri, coupleDayCounts.toString())
+        UserInfoUiState(
+            yourName ?: "",
+            yourFrName ?: "",
+            yourImageUri,
+            yourFrImageUri,
+            coupleDayCounts.toString())
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000L),
@@ -64,8 +70,8 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
     }
 
     fun saveCoupleData() {
-        coupleRepository.saveYourName(_userInfoUiStateFlow.value.yourName)
-        coupleRepository.saveYourPartnerName(_userInfoUiStateFlow.value.yourFrName)
+        coupleRepository.saveYourName()
+        coupleRepository.saveYourPartnerName()
         coupleRepository.saveCoupleDate()
     }
 
