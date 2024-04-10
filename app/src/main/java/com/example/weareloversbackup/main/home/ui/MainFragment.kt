@@ -1,6 +1,7 @@
 package com.example.weareloversbackup.main.home.ui
 
 import android.app.DatePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,15 +24,19 @@ import com.example.weareloversbackup.data.constant.PREF_YOUR_NAME
 import com.example.weareloversbackup.databinding.FragmentMainBinding
 import com.example.weareloversbackup.main.home.domain.MainFragmentViewModel
 import com.example.weareloversbackup.ui.base.BaseFragment
+import com.example.weareloversbackup.utils.helper.IPermissionHelper
 import com.example.weareloversbackup.utils.parseDateTimestamps
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>() {
     private val viewModel: MainFragmentViewModel by viewModels()
+    @Inject lateinit var permissionHelper: IPermissionHelper
+    private lateinit var imagePermissionListener: IPermissionHelper.PermissionListener
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_settings, menu)
@@ -95,7 +100,27 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         return FragmentMainBinding.inflate(inflater, container, false)
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun setupView() {
+        imagePermissionListener = object : IPermissionHelper.PermissionListener {
+            override fun onPermissionGranted() {
+                Log.d(getClassTag(), "onPermissionGranted: ")
+                //TODO: show image picker
+            }
+
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                Log.d(getClassTag(), "onPermissionDenied: ")
+                //TODO: toast to guide user to grant permission in app settings
+            }
+        }
+
         setHasOptionsMenu(true)
 
         val zoomin = AnimationUtils.loadAnimation(activity, R.anim.zoom_in)
@@ -103,6 +128,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     override fun setViewListener() {
+        permissionHelper.registerPermissionListener(REQ_PERMISSION_IMAGE, imagePermissionListener)
+
+        binding.ibEditYourPartnerImage.setOnClickListener {
+            checkImagePermission()
+        }
+
+        binding.ibEditYourImage.setOnClickListener {
+            checkImagePermission()
+        }
+
         binding.ibEditYourName.setOnClickListener {
             showDialogChangeName(PREF_YOUR_NAME, binding.tvYourName.text.toString())
         }
@@ -113,6 +148,31 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
         binding.ibEditCoupleDate.setOnClickListener {
             showDatePicker()
+        }
+    }
+
+    private fun checkImagePermission() {
+        when {
+            permissionHelper.isPermissionGranted(requireContext(), getImagePermission()) -> {
+                Log.d(getClassTag(), "setViewListener: permission granted")
+            }
+
+            shouldShowRequestPermissionRationale(getImagePermission()) -> {
+                Log.d(getClassTag(), "setViewListener: show rationale")
+                requestPermissions(arrayOf(getImagePermission()), REQ_PERMISSION_IMAGE)
+            }
+
+            else -> {
+                requestPermissions(arrayOf(getImagePermission()), REQ_PERMISSION_IMAGE)
+            }
+        }
+    }
+
+    private fun getImagePermission(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            android.Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
         }
     }
 
@@ -144,6 +204,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         dialogFragment.show(parentFragmentManager, "ChangeNameDialogFragment")
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        permissionHelper.unregisterPermissionListener(REQ_PERMISSION_IMAGE, imagePermissionListener)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
@@ -173,5 +238,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         menu.findItem(R.id.action_settings).isVisible = !viewModel.isEditingCoupleData()
         menu.findItem(R.id.action_save_couple_data).isVisible = viewModel.isEditingCoupleData()
         super.onPrepareOptionsMenu(menu)
+    }
+
+    companion object {
+        const val REQ_PERMISSION_IMAGE = 1
     }
 }
