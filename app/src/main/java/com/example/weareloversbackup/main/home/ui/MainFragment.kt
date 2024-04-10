@@ -1,8 +1,11 @@
 package com.example.weareloversbackup.main.home.ui
 
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -11,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -27,6 +31,7 @@ import com.example.weareloversbackup.ui.base.BaseFragment
 import com.example.weareloversbackup.utils.helper.IPermissionHelper
 import com.example.weareloversbackup.utils.parseDateTimestamps
 import dagger.hilt.android.AndroidEntryPoint
+import de.hdodenhof.circleimageview.BuildConfig
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
@@ -117,7 +122,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
             override fun onPermissionDenied(deniedPermissions: List<String>) {
                 Log.d(getClassTag(), "onPermissionDenied: ")
-                //TODO: toast to guide user to grant permission in app settings
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Permission Denied")
+                    .setMessage("You have chosen to deny permission for image picker. Please grant permission in device settings to use this feature")
+                    .setPositiveButton("Go to Settings") { dialog, _ ->
+                        dialog.dismiss()
+                        navigateAppSettings()
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+                    .show()
             }
         }
 
@@ -125,6 +138,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
         val zoomin = AnimationUtils.loadAnimation(activity, R.anim.zoom_in)
         binding.imgHeart.startAnimation(zoomin)
+    }
+
+    private fun navigateAppSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = Uri.parse("package:" + requireContext().packageName)
+        startActivity(intent)
+        //TODO: navigate to permission page, not general page
     }
 
     override fun setViewListener() {
