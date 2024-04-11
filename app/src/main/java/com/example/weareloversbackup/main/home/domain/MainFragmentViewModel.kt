@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weareloversbackup.coupleInstantiation.data.ICoupleRepository
-import com.example.weareloversbackup.data.constant.DEFAULT_IMAGE_PATH
 import com.example.weareloversbackup.main.home.ui.DEFAULT_USER_INFO_UI_STATE
 import com.example.weareloversbackup.main.home.ui.UserInfoUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,12 +11,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
+enum class ChangeTarget {
+    YOU,
+    YOUR_PARTNER,
+    BACKGROUND
+}
 
 @HiltViewModel
 class MainFragmentViewModel @Inject constructor(private val coupleRepository: ICoupleRepository) : ViewModel() {
@@ -28,8 +35,8 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
         coupleRepository.getCoupleDateFlow()
     ) {
             yourName, yourImage, yourFrName, yourFrImage, coupleDate ->
-        val yourImageUri = Uri.parse(yourImage ?: DEFAULT_IMAGE_PATH)
-        val yourFrImageUri = Uri.parse(yourFrImage ?: DEFAULT_IMAGE_PATH)
+        val yourImageUri = Uri.parse(yourImage)
+        val yourFrImageUri = Uri.parse(yourFrImage)
         val coupleDayCounts = getCoupleDaysCount(coupleDate)
         UserInfoUiState(
             yourName ?: "",
@@ -44,8 +51,24 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
     )
     val userInfoUiStateFlow: Flow<UserInfoUiState> = _userInfoUiStateFlow
 
-    private val _isEditingCoupleDate = MutableStateFlow<Boolean>(false)
-    val isEditingCoupleDataFlow: Flow<Boolean> = _isEditingCoupleDate.drop(1)
+    private val _isEditingCoupleData = MutableStateFlow<Boolean>(false)
+    val isEditingCoupleDataFlow: Flow<Boolean> = _isEditingCoupleData.drop(1)
+
+    private var changeTarget: ChangeTarget? = null
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    init {
+        viewModelScope.launch {
+            _isEditingCoupleData.collect { isEditing ->
+                if(!isEditing) {
+                    changeTarget = null
+                }
+            }
+        }
+    }
 
     private fun getCoupleDaysCount(coupleDate: Long): Long {
         val current = Calendar.getInstance().timeInMillis
@@ -57,14 +80,6 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
         coupleRepository.setCoupleDate(date)
     }
 
-    fun setYourImage(newImage: String) {
-        coupleRepository.setYourImage(newImage)
-    }
-
-    fun setYourPartnerImage(newImage: String) {
-        coupleRepository.setYourPartnerImage(newImage)
-    }
-
     fun cancelEditCoupleData() {
         setIsEditingCoupleDate(false)
     }
@@ -73,13 +88,27 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
         coupleRepository.saveYourName()
         coupleRepository.saveYourPartnerName()
         coupleRepository.saveCoupleDate()
+        coupleRepository.saveYourImage()
+        coupleRepository.saveYourPartnerImage()
     }
 
     fun setIsEditingCoupleDate(isEditing: Boolean) {
-        _isEditingCoupleDate.value = isEditing
+        _isEditingCoupleData.value = isEditing
     }
 
     fun isEditingCoupleData(): Boolean {
-        return _isEditingCoupleDate.value
+        return _isEditingCoupleData.value
+    }
+
+    fun onCoupleAvatarSelected(path: String) {
+        when(changeTarget) {
+            ChangeTarget.YOU -> coupleRepository.setYourImage(path)
+            ChangeTarget.YOUR_PARTNER -> coupleRepository.setYourPartnerImage(path)
+            else -> return
+        }
+    }
+
+    fun targetChanged(target: ChangeTarget) {
+        changeTarget = target
     }
 }

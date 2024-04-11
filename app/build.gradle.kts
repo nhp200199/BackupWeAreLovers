@@ -59,6 +59,8 @@ dependencies {
 
     implementation ("com.github.bumptech.glide:glide:4.10.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.10.0")
+
+    implementation("com.theartofdev.edmodo:android-image-cropper:2.8.0")
 }
 
 kapt {

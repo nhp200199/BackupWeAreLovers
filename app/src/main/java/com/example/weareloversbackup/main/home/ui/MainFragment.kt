@@ -1,5 +1,6 @@
 package com.example.weareloversbackup.main.home.ui
 
+import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
@@ -14,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat.invalidateOptionsMenu
 import androidx.core.view.isVisible
@@ -26,12 +28,14 @@ import com.example.weareloversbackup.R
 import com.example.weareloversbackup.data.constant.PREF_YOUR_FRIEND_NAME
 import com.example.weareloversbackup.data.constant.PREF_YOUR_NAME
 import com.example.weareloversbackup.databinding.FragmentMainBinding
+import com.example.weareloversbackup.main.home.domain.ChangeTarget
 import com.example.weareloversbackup.main.home.domain.MainFragmentViewModel
 import com.example.weareloversbackup.ui.base.BaseFragment
 import com.example.weareloversbackup.utils.helper.IPermissionHelper
 import com.example.weareloversbackup.utils.parseDateTimestamps
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
-import de.hdodenhof.circleimageview.BuildConfig
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
@@ -117,7 +121,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         imagePermissionListener = object : IPermissionHelper.PermissionListener {
             override fun onPermissionGranted() {
                 Log.d(getClassTag(), "onPermissionGranted: ")
-                //TODO: show image picker
+                showCoupleAvatarPicker()
             }
 
             override fun onPermissionDenied(deniedPermissions: List<String>) {
@@ -151,10 +155,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         permissionHelper.registerPermissionListener(REQ_PERMISSION_IMAGE, imagePermissionListener)
 
         binding.ibEditYourPartnerImage.setOnClickListener {
+            viewModel.targetChanged(ChangeTarget.YOUR_PARTNER)
             checkImagePermission()
         }
 
         binding.ibEditYourImage.setOnClickListener {
+            viewModel.targetChanged(ChangeTarget.YOU)
             checkImagePermission()
         }
 
@@ -175,6 +181,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         when {
             permissionHelper.isPermissionGranted(requireContext(), getImagePermission()) -> {
                 Log.d(getClassTag(), "setViewListener: permission granted")
+                showCoupleAvatarPicker()
             }
 
             shouldShowRequestPermissionRationale(getImagePermission()) -> {
@@ -186,6 +193,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 requestPermissions(arrayOf(getImagePermission()), REQ_PERMISSION_IMAGE)
             }
         }
+    }
+
+    private fun showCoupleAvatarPicker() {
+        CropImage.activity()
+            .setGuidelines(CropImageView.Guidelines.ON)
+            .setActivityTitle("My Crop")
+            .setCropShape(CropImageView.CropShape.RECTANGLE)
+            .setCropMenuCropButtonTitle("Done")
+            .start(requireContext(), this)
     }
 
     private fun getImagePermission(): String {
@@ -245,6 +261,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                     invalidateOptionsMenu(requireActivity())
                     enableCoupleDataEditor(it)
                 }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                viewModel.onCoupleAvatarSelected(result.uri.toString())
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(requireContext(), "Error when getting image", Toast.LENGTH_SHORT).show()
             }
         }
     }

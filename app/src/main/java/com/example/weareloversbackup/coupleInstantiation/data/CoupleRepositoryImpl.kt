@@ -70,4 +70,16 @@ class CoupleRepositoryImpl @Inject constructor(
     override fun saveCoupleDate() {
         coupleDataStore.saveCoupleDate()
     }
+
+    override fun saveCoupleImage() {
+        coupleDataStore.saveCoupleImage()
+    }
+
+    override fun saveYourImage() {
+        coupleDataStore.saveYourImage()
+    }
+
+    override fun saveYourPartnerImage() {
+        coupleDataStore.saveYourPartnerImage()
+    }
 }

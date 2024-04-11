@@ -18,4 +18,7 @@ interface ICoupleDataStore {
     fun saveYourName()
     fun saveYourPartnerName()
     fun saveCoupleDate()
+    fun saveCoupleImage()
+    fun saveYourImage()
+    fun saveYourPartnerImage()
 }
