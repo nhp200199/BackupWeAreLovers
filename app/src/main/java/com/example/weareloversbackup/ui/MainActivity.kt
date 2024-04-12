@@ -10,17 +10,24 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
 import com.example.weareloversbackup.databinding.ActivityMainBinding
 import com.example.weareloversbackup.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
+    private val viewModel: MainActivityViewModel by viewModels()
     private var closeAppFlag = 0 // used to check exit
     private lateinit var timer: CountDownTimer
     override fun getClassTag(): String {
@@ -36,6 +43,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         setUpViewPager()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.backgroundImageFlow.collect {
+                    Glide.with(this@MainActivity)
+                        .load(it)
+                        .into(binding.imgBackground)
+                }
+            }
+        }
     }
 
     override fun setViewListener() {

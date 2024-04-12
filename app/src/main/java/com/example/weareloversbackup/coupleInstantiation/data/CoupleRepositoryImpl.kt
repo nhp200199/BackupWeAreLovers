@@ -47,8 +47,8 @@ class CoupleRepositoryImpl @Inject constructor(
         return coupleDataStore.setCoupleDate(date)
     }
 
-    override fun setCoupleImage(image: String) {
-        return coupleDataStore.setCoupleImage(image)
+    override fun saveCoupleImage(image: String) {
+        return coupleDataStore.saveCoupleImage(image)
     }
 
     override fun setYourImage(image: String) {
@@ -69,10 +69,6 @@ class CoupleRepositoryImpl @Inject constructor(
 
     override fun saveCoupleDate() {
         coupleDataStore.saveCoupleDate()
-    }
-
-    override fun saveCoupleImage() {
-        coupleDataStore.saveCoupleImage()
     }
 
     override fun saveYourImage() {

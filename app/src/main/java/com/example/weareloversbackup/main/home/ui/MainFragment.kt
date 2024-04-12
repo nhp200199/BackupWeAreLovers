@@ -56,14 +56,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         Log.d(getClassTag(), "onOptionsItemSelected: ${item.itemId}")
         return when (item.itemId) {
             R.id.menu_action_edit_couple_data -> {
-                viewModel.setIsEditingCoupleDate(isVisible)
+                viewModel.setIsEditingCoupleData(isVisible)
                 true
             }
             R.id.menu_action_edit_background -> {
+                viewModel.targetChanged(ChangeTarget.BACKGROUND)
+                checkImagePermission()
                 true
             }
             R.id.action_save_couple_data -> {
-                viewModel.setIsEditingCoupleDate(false)
+                viewModel.setIsEditingCoupleData(false)
                 viewModel.saveCoupleData()
                 true
             }
@@ -121,7 +123,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         imagePermissionListener = object : IPermissionHelper.PermissionListener {
             override fun onPermissionGranted() {
                 Log.d(getClassTag(), "onPermissionGranted: ")
-                showCoupleAvatarPicker()
+                checkAndShowImagePicker()
             }
 
             override fun onPermissionDenied(deniedPermissions: List<String>) {
@@ -142,6 +144,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
         val zoomin = AnimationUtils.loadAnimation(activity, R.anim.zoom_in)
         binding.imgHeart.startAnimation(zoomin)
+    }
+
+    private fun showBackgroundImagePicker() {
+        CropImage.activity()
+            .setGuidelines(CropImageView.Guidelines.ON)
+            .setActivityTitle("My Crop")
+            .setCropShape(CropImageView.CropShape.RECTANGLE)
+            .setCropMenuCropButtonTitle("Done")
+            .start(requireContext(), this)
     }
 
     private fun navigateAppSettings() {
@@ -181,7 +192,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         when {
             permissionHelper.isPermissionGranted(requireContext(), getImagePermission()) -> {
                 Log.d(getClassTag(), "setViewListener: permission granted")
-                showCoupleAvatarPicker()
+                checkAndShowImagePicker()
             }
 
             shouldShowRequestPermissionRationale(getImagePermission()) -> {
@@ -191,6 +202,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
             else -> {
                 requestPermissions(arrayOf(getImagePermission()), REQ_PERMISSION_IMAGE)
+            }
+        }
+    }
+
+    private fun checkAndShowImagePicker() {
+        if (viewModel.getTarget() != null) {
+            if (viewModel.getTarget() == ChangeTarget.YOUR_PARTNER
+                || viewModel.getTarget() == ChangeTarget.YOU) {
+                showCoupleAvatarPicker()
+            } else {
+                showBackgroundImagePicker()
             }
         }
     }
@@ -270,7 +292,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
-                viewModel.onCoupleAvatarSelected(result.uri.toString())
+                viewModel.onChangeImage(result.uri.toString())
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(requireContext(), "Error when getting image", Toast.LENGTH_SHORT).show()
             }

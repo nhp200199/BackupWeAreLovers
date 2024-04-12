@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.stateIn
@@ -55,10 +54,6 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
     val isEditingCoupleDataFlow: Flow<Boolean> = _isEditingCoupleData.drop(1)
 
     private var changeTarget: ChangeTarget? = null
-        get() = field
-        set(value) {
-            field = value
-        }
 
     init {
         viewModelScope.launch {
@@ -81,7 +76,7 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
     }
 
     fun cancelEditCoupleData() {
-        setIsEditingCoupleDate(false)
+        setIsEditingCoupleData(false)
     }
 
     fun saveCoupleData() {
@@ -92,7 +87,7 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
         coupleRepository.saveYourPartnerImage()
     }
 
-    fun setIsEditingCoupleDate(isEditing: Boolean) {
+    fun setIsEditingCoupleData(isEditing: Boolean) {
         _isEditingCoupleData.value = isEditing
     }
 
@@ -108,7 +103,20 @@ class MainFragmentViewModel @Inject constructor(private val coupleRepository: IC
         }
     }
 
+    fun onChangeImage(path: String) {
+        when(changeTarget) {
+            ChangeTarget.BACKGROUND -> coupleRepository.saveCoupleImage(path)
+            ChangeTarget.YOU -> coupleRepository.setYourImage(path)
+            ChangeTarget.YOUR_PARTNER -> coupleRepository.setYourPartnerImage(path)
+            else -> return
+        }
+    }
+
     fun targetChanged(target: ChangeTarget) {
         changeTarget = target
+    }
+
+    fun getTarget(): ChangeTarget? {
+        return changeTarget
     }
 }
