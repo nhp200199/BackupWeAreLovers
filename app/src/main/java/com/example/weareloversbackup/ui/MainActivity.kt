@@ -284,5 +284,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     companion object {
         private const val TIME_TO_ACCEPT_CLOSE_APP = 5 * 1000
         const val COUNT_DOWN_INTERVAL = 200
+
+        fun startActivity(context: Context) {
+            Intent(context, MainActivity::class.java).apply {
+                context.startActivity(this)
+            }
+        }
     }
 }

@@ -11,9 +11,6 @@ interface IPermissionHelper {
 
     fun isPermissionGranted(context: Context, permission: String): Boolean
     fun allPermissionGranted(context: Context, permissions: List<String>): Boolean
-    fun requestMultiplePermissions(activity: Activity,
-                                   permissions: List<String>,
-                                   requestCode: Int)
 
     fun registerPermissionListener(requestCode: Int, listener: PermissionListener)
     fun unregisterPermissionListener(requestCode: Int, listener: PermissionListener)

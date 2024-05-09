@@ -21,16 +21,6 @@ class PermissionHelperImpl @Inject constructor()
         return permissions.all { isPermissionGranted(context, it) }
     }
 
-    override fun requestMultiplePermissions(activity: Activity, permissions: List<String>, requestCode: Int) {
-        if (allPermissionGranted(activity, permissions)) {
-            permissionListeners[requestCode]?.forEach {
-                it.onPermissionGranted()
-            }
-        } else {
-            ActivityCompat.requestPermissions(activity, getDeniedPermissions(activity, permissions), requestCode)
-        }
-    }
-
     override fun registerPermissionListener(requestCode: Int, listener: IPermissionHelper.PermissionListener) {
         if (!permissionListeners.containsKey(requestCode)) {
             permissionListeners[requestCode] = mutableSetOf(listener)

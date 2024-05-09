@@ -13,6 +13,8 @@ import com.example.weareloversbackup.coupleInstantiation.data.ICoupleDataStore
 import com.example.weareloversbackup.coupleInstantiation.data.ICoupleRepository
 import com.example.weareloversbackup.data.constant.SHARE_PREF_USER_INFO
 import com.example.weareloversbackup.data.constant.SHARE_PREF_USER_PREFERENCE
+import com.example.weareloversbackup.utils.helper.AlarmHelperImpl
+import com.example.weareloversbackup.utils.helper.IAlarmHelper
 import com.phucnguyen.lovereminder.di.PrefPreferenceSetting
 import com.phucnguyen.lovereminder.di.PrefUserInfo
 import dagger.Binds
@@ -38,6 +40,9 @@ abstract class AppModule {
     @Binds
     abstract fun appPreferencesRepository(
         appPreferencesRepositoryImpl: AppPreferencesRepositoryImpl): IAppPreferencesRepository
+
+    @Binds
+    abstract fun alarmHelper(alarmHelperImpl: AlarmHelperImpl): IAlarmHelper
 
     companion object {
         @Singleton
