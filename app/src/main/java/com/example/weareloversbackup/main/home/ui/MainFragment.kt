@@ -2,6 +2,8 @@ package com.example.weareloversbackup.main.home.ui
 
 import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -33,9 +35,11 @@ import com.example.weareloversbackup.main.home.domain.MainFragmentViewModel
 import com.example.weareloversbackup.ui.base.BaseFragment
 import com.example.weareloversbackup.utils.helper.IPermissionHelper
 import com.example.weareloversbackup.utils.parseDateTimestamps
+import com.example.weareloversbackup.widgets.CoupleWidgetProvider
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.internal.Contexts.getApplication
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
@@ -273,6 +277,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.userInfoUiStateFlow.collect {
                     setUserInfo(it)
+                    updateCoupleWidget()
                 }
             }
         }
@@ -285,6 +290,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 }
             }
         }
+    }
+
+    private fun updateCoupleWidget() {
+        val intent = Intent(requireActivity(), CoupleWidgetProvider::class.java)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids = AppWidgetManager.getInstance(requireActivity()).getAppWidgetIds(
+            ComponentName(requireContext(), CoupleWidgetProvider::class.java)
+        )
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+        requireActivity().sendBroadcast(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
