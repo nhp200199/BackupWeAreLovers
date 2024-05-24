@@ -6,11 +6,8 @@ import com.example.weareloversbackup.coupleInstantiation.ui.CoupleInstantiationF
 import com.example.weareloversbackup.utils.formatDate
 import com.example.weareloversbackup.utils.parseDateTimestamps
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -19,6 +16,7 @@ class CoupleInstantiationViewModel @Inject constructor(
     private val coupleRepository: ICoupleRepository
 ) : ViewModel() {
 
+    var isAlarmSettingsOpened: Boolean = false
     private val _yourNameInputStateFlow = coupleRepository.getYourNameFlow()
 
     private val _yourPartnerNameInputStateFlow = coupleRepository.getYourPartnerNameFlow()

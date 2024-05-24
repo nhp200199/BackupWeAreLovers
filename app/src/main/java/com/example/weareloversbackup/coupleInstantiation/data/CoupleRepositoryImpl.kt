@@ -8,6 +8,10 @@ import javax.inject.Inject
 class CoupleRepositoryImpl @Inject constructor(
     private val coupleDataStore: ICoupleDataStore
 ) : ICoupleRepository {
+    override fun getCoupleDateTimestamps(): Long {
+        return coupleDataStore.getCoupleDateTimestamps()
+    }
+
     override fun getYourNameFlow(): Flow<String?> {
         return coupleDataStore.getYourNameFlow()
     }
