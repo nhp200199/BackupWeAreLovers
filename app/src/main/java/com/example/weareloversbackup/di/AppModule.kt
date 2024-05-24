@@ -27,6 +27,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AppModule {
+    @Binds
+    abstract fun coupleRepository(coupleRepositoryImpl: CoupleRepositoryImpl): ICoupleRepository
+
     @Singleton
     @Binds
     abstract fun coupleDataStore(coupleDataStoreImpl: CoupleDataStoreImpl): ICoupleDataStore

@@ -3,6 +3,7 @@ package com.example.weareloversbackup.coupleInstantiation.data
 import kotlinx.coroutines.flow.Flow
 
 interface ICoupleRepository {
+    fun getCoupleDateTimestamps(): Long
     fun getYourNameFlow(): Flow<String?>
     fun getYourPartnerNameFlow(): Flow<String?>
     fun getCoupleDateFlow(): Flow<Long>

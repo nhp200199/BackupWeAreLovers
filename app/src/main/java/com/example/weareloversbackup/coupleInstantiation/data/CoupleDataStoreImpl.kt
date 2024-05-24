@@ -39,6 +39,10 @@ class CoupleDataStoreImpl @Inject constructor(
         _coupleImageFlow = MutableStateFlow(coupleImage)
     }
 
+    override fun getCoupleDateTimestamps(): Long {
+        return sharedPreferences.getLong(PREF_COUPLE_DATE, 0L)
+    }
+
     override fun getYourNameFlow(): Flow<String?> {
         return _yourNameFlow.asStateFlow()
     }

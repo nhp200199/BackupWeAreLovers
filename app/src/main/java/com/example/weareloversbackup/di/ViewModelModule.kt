@@ -12,8 +12,6 @@ import dagger.hilt.android.components.ViewModelComponent
 @Module
 @InstallIn(ViewModelComponent::class)
 abstract class ViewModelModule {
-    @Binds
-    abstract fun coupleRepository(coupleRepositoryImpl: CoupleRepositoryImpl): ICoupleRepository
 
     @Binds
     abstract fun appPreferencesRepository(appPreferencesRepositoryImpl: AppPreferencesRepositoryImpl): IAppPreferencesRepository
