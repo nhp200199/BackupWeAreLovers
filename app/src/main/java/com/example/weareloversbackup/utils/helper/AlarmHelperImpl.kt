@@ -2,10 +2,13 @@ package com.example.weareloversbackup.utils.helper
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import com.example.weareloversbackup.common.receivers.CoupleDateReceiver
+import com.example.weareloversbackup.common.receivers.SystemBootReceiver
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -18,7 +21,21 @@ class AlarmHelperImpl @Inject constructor(): IAlarmHelper {
         if (calendar.before(Calendar.getInstance())) {
             calendar.add(Calendar.DATE, 1)
         }
-        return scheduleAlarm(context, calendar, forceInexact)
+        val scheduleResult =  scheduleAlarm(context, calendar, forceInexact)
+        if (scheduleResult == 1) {
+            persistAlarmWhenDeviceReboot(context)
+        }
+        return scheduleResult
+    }
+
+    private fun persistAlarmWhenDeviceReboot(context: Context) {
+        val receiver = ComponentName(context, SystemBootReceiver::class.java)
+        val pm = context.packageManager
+        pm.setComponentEnabledSetting(
+            receiver,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
     }
 
     private fun scheduleAlarm(context: Context, timestamps: Long, forceInexact: Boolean): Int {
